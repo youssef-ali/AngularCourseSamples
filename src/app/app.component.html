@@ -1,0 +1,39 @@
+
+<!-- 
+<h1>My First Angular App</h1>
+<courses></courses> -->
+
+<favorite [isFavorite] = "post.isFavorite" (change)="onFavoriteChanged($event)"></favorite>
+<br/>
+
+<h2>Custom pipe</h2>
+<title-casing></title-casing>
+
+<br>
+
+<bootsrap-panel>
+    <!-- <div class="header">Header</div> -->
+    <ng-container class="header">Header</ng-container>
+    <div class="body">
+        <h2>Body</h2>
+        <p>Some content here...</p>
+    </div>
+</bootsrap-panel>
+<hr/>
+<twitter-like [isActive] = "tweet.isLiked" [likesCount] = "tweet.likesCount" (change) = "onChangeLike($event)">
+    <ng-container class="tweetBody">
+        {{ tweet.body}}
+    </ng-container>
+</twitter-like>
+<br/>
+<br/>
+<h3>Sample for custom directives</h3>
+<!-- <input type="text" appInputFormat [format]="'upperCase'"/> -->
+<br>
+<input type="text" [appInputFormat] ="'upperCase'"/>
+<br/>
+<br/>
+<h3>Sample for Binding Form</h3>
+<br/>
+<contact-form></contact-form>
+
