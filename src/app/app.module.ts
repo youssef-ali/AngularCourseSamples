@@ -49,7 +49,7 @@ import { PostsComponent } from './posts/posts.component';
     HttpClientModule
   ],
   providers: [
-    AuthorsService
+    AuthorsService,
   ],
   bootstrap: [AppComponent]
 })
