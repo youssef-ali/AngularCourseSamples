@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { PostService } from '../services/post.service';
+import { AppError } from '../common/app-error';
+import { BadInputError } from '../common/bad-input-error';
+import { NotFoundError } from '../common/not-found-error';
+import { throwError } from 'rxjs';
 
 @Component({
   selector: 'posts',
@@ -37,10 +41,10 @@ export class PostsComponent implements OnInit  {
             // post['id'] = (response as any).id; // when post variable be not declared as any
             this.posts.splice(0,0,post);
         },
-        (error: Response) =>{
-          if(error.status === 400)
+        (error: AppError) =>{
+          if(error instanceof BadInputError)
             {
-              //this.form.setErrors(error.json()); // in case there is form
+              // this.form.setErrors(error.originalError); // in case there is form
             }
           else{
             alert("Unexpected error");
@@ -68,15 +72,17 @@ export class PostsComponent implements OnInit  {
         let index = this.posts.indexOf(post);
         this.posts.splice(index,1); 
       },
-      (error: Response) =>{
-        if(error.status === 404)
-        // handling expected errors
+      (error: AppError) =>{
+        if(error instanceof NotFoundError)
+          // handling expected errors
           alert('This post has already been deleted.');
-        else{
-          // handling unexpected errors
-          alert("Unexpected error");
-          console.log(error);  
-        }
+         else{   
+           throw error;              
+        // ------ commented to use global AppErrorHandler
+        //   // handling unexpected errors
+        //   alert("Unexpected error");
+        //   console.log(error);  
+         }
       });
   }
 
