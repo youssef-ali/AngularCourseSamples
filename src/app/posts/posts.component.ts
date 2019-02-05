@@ -33,15 +33,17 @@ export class PostsComponent implements OnInit  {
 
   createPost(input: HTMLInputElement){
     let post: any = {title: input.value};
+    this.posts.splice(0,0,post);
+
     input.value = '';
     this.service.create(post)
       .subscribe(
         response => {
             post.id = (response as any).id; // when post variable be declared as any
             // post['id'] = (response as any).id; // when post variable be not declared as any
-            this.posts.splice(0,0,post);
         },
         (error: AppError) =>{
+          this.posts.splice(0,1); // to rollback - optimistic update
           if(error instanceof BadInputError)
             {
               // this.form.setErrors(error.originalError); // in case there is form
@@ -66,13 +68,17 @@ export class PostsComponent implements OnInit  {
   }
 
   deletePost(post){
+    let index = this.posts.indexOf(post);
+    this.posts.splice(index,1); 
     this.service.delete(post.id)
       .subscribe(
-        response => {
-        let index = this.posts.indexOf(post);
-        this.posts.splice(index,1); 
-      },
+      //   response => { // commented to work with Optimistic update
+      //   let index = this.posts.indexOf(post);
+      //   this.posts.splice(index,1); 
+      // }
+      null,
       (error: AppError) =>{
+        this.posts.splice(index,0,post); 
         if(error instanceof NotFoundError)
           // handling expected errors
           alert('This post has already been deleted.');

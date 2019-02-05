@@ -7,6 +7,7 @@ import { AppError } from '../common/app-error';
 import { NotFoundError } from '../common/not-found-error';
 import { BadInputError } from '../common/bad-input-error';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -24,6 +25,7 @@ export class DataService {
    {  
      return this.http.post(this.url,JSON.stringify(resource))
       .pipe(
+        //  map(response => response),
         catchError(this.HandleError)
       );
    }
@@ -33,6 +35,7 @@ export class DataService {
    }
 
    delete(id){
+    //    return throwError(new AppError()); // just to test Optimistic update
      return this.http.delete(this.url + '/' + id)
       .pipe(
         catchError(this.HandleError)
