@@ -24,31 +24,28 @@ export class PostService {
    {  
      return this.http.post(this.url,JSON.stringify(post))
       .pipe(
-        catchError(
-          (error: Response, caught)=>{
-            if(error.status === 400){
-              return throwError(new BadInputError(error.json()));
-            }
-            return throwError(new AppError(error.json()));
-          }
-        )
+        catchError(this.HandleError)
       );
    }
 
    updatePost(post){
      return this.http.patch(this.url + '/' + post.id, JSON.stringify({isRead: true}));
    }
+
    deletePost(id){
-     return this.http.delete(this.url + 'abc/' + id)
+     return this.http.delete(this.url + '/' + id)
       .pipe(
-        catchError(
-          (error:Response, caught)=>{
-            // if(error.status === 404){
-            //   return throwError(new NotFoundError(error));
-            // }
-            return throwError(new AppError(error));
-          }
-        )
+        catchError(this.HandleError)
      );
    }
+
+   private HandleError(error:Response){
+    if(error.status === 400){
+      return throwError(new BadInputError(error.json()));
+    }
+    if(error.status === 404){
+      return throwError(new NotFoundError(error));
+    }
+    return throwError(new AppError(error));
+  }
 }
