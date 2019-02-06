@@ -72,7 +72,7 @@ export class PostsComponent implements OnInit  {
     this.posts.splice(index,1); 
     this.service.delete(post.id)
       .subscribe(
-      //   response => { // commented to work with Optimistic update
+      //   response => {              // commented to work with Optimistic update
       //   let index = this.posts.indexOf(post);
       //   this.posts.splice(index,1); 
       // }
